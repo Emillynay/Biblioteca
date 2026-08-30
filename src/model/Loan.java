@@ -64,6 +64,10 @@ public class Loan {
 		return returnDate;
 	}
 	
+	public void setReturnDate(LocalDate returnDate) {
+	    this.returnDate = returnDate;
+	}
+	
 	public boolean isActive() {
 		return returnDate == null;
 	}

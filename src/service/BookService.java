@@ -6,11 +6,11 @@ import java.util.List;
 import exception.BookNotFoundException;
 import model.Book;
 import repository.BookRepository;
-import repository.memory.InMemoryBookRepository;
+import repository.jdbc.JdbcBookRepository;
 
 public class BookService {
 
-	private BookRepository repository = new InMemoryBookRepository();
+	private BookRepository repository = new JdbcBookRepository();
 
 	public void addBook(Book book) {
 		repository.save(book);
@@ -60,17 +60,19 @@ public class BookService {
 	}
 	
 	public void updateBook(Book book) throws BookNotFoundException {
-		
-		Book existingBook = findById(book.getId());
-		
-        existingBook.setName(book.getName());
-        existingBook.setAuthor(book.getAuthor());
-        existingBook.setCdd(book.getCdd());
-        existingBook.setNumberOfCopies(book.getNumberOfCopies());
-        
-    }
 
-    public void removeBook(Long id) {
+	    Book existingBook = findById(book.getId());
+
+	    existingBook.setName(book.getName());
+	    existingBook.setAuthor(book.getAuthor());
+	    existingBook.setCdd(book.getCdd());
+	    existingBook.setNumberOfCopies(book.getNumberOfCopies());
+	    existingBook.setAvailableCopies(book.getAvailableCopies());
+
+	    repository.update(existingBook);
+	}
+
+    public void removeBook(Long id) throws BookNotFoundException {
     	
     	Book book = repository.findById(id);
     	repository.delete(book);

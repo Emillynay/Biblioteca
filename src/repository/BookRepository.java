@@ -6,7 +6,6 @@ import model.Book;
 
 public interface BookRepository {
 	
-	
 	void save(Book book);
 	
 	List<Book> findAll();
@@ -14,4 +13,6 @@ public interface BookRepository {
 	Book findById(Long id);
 	
 	void delete(Book book);
+	
+	void update(Book book);
 }

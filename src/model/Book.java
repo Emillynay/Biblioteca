@@ -18,6 +18,16 @@ public class Book {
 		this.numberOfCopies = numberOfCopies;
 		this.availableCopies = numberOfCopies;
 	}
+	
+	public Book(Long id, String name, String author, int cdd, int numberOfCopies, int availableCopies) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.author = author;
+		this.cdd = cdd;
+		this.numberOfCopies = numberOfCopies;
+		this.availableCopies = availableCopies;
+	}
 
 	public String getName() {
 		return name;
@@ -82,5 +92,9 @@ public class Book {
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	public void setAvailableCopies(int availableCopies) {
+	    this.availableCopies = availableCopies;
 	}
 }

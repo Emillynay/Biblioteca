@@ -37,4 +37,10 @@ public class InMemoryBookRepository implements BookRepository {
 		books.remove(book);
 	}
 
+	@Override
+	public void update(Book book) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

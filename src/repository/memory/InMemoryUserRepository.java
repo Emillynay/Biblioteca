@@ -37,5 +37,11 @@ public class InMemoryUserRepository implements UserRepository {
 	public void delete(User user) {
 		users.remove(user);
 	}
+
+	@Override
+	public void update(User user) {
+		// TODO Auto-generated method stub
+		
+	}
 	
 }

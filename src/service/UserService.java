@@ -3,14 +3,13 @@ package service;
 import java.util.ArrayList;
 import java.util.List;
 
-import model.Book;
 import model.User;
 import repository.UserRepository;
-import repository.memory.InMemoryUserRepository;
+import repository.jdbc.JdbcUserRepository;
 
 public class UserService {
 	
-	private UserRepository repository = new InMemoryUserRepository();
+	private UserRepository repository = new JdbcUserRepository();
 	
 	public List<User> listUsers() {
 	    return repository.findAll();
@@ -51,12 +50,13 @@ public class UserService {
 		existingUser.setNumber(user.getNumber());
 		existingUser.setEmail(user.getEmail());
 		existingUser.setAnddress(user.getAnddress());
+		
+		repository.update(existingUser);
 	}
 	
 	public void removeUser(Long id) {
 		User user = repository.findById(id);
-		
-		if(user == null) {
+		if (user == null) {
 			return;
 		}
 		repository.delete(user);

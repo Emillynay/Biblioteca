@@ -14,4 +14,5 @@ public interface LoanRepository {
 	
 	void delete(Loan loan);
 
+	void update(Loan loan);
 }

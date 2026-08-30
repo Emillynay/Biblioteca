@@ -20,6 +20,7 @@ public class testeBiblioteca {
 		Scanner sc = new Scanner(System.in);
 		Locale.setDefault(Locale.US);
 		
+		/*
 		BookService bookService = new BookService();
 		
 		Book book1 = new Book("Dom Casmurro", "Machado de Assis", 800, 5);
@@ -125,6 +126,6 @@ public class testeBiblioteca {
 	for (Loan loan : loanService.searchByBook(book1)) {
 		System.out.println("Empréstimo: " + loan.getId() + " | Usuário: " + loan.getUser().getName()
 				+ " | Ativo: " + loan.isActive() );
-	}
+	} */
 	}
 }
