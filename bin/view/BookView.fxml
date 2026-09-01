@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.URL?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.BookController">
+
+    <stylesheets>
+        <URL value="@style.css" />
+    </stylesheets>
+
+    <top>
+        <Label styleClass="book-title" text="Gerenciar Livros" BorderPane.alignment="CENTER">
+            <BorderPane.margin>
+                <Insets bottom="25" top="25" />
+            </BorderPane.margin>
+        </Label>
+    </top>
+
+    <center>
+        <VBox alignment="CENTER" maxWidth="500" spacing="15" styleClass="book-form">
+
+            <TextField fx:id="nameField" promptText="Nome do livro" />
+
+            <TextField fx:id="authorField" promptText="Autor" />
+
+            <TextField fx:id="cddField" promptText="CDD" />
+
+            <TextField fx:id="copiesField" promptText="Número de exemplares" />
+
+                  <Button fx:id="saveButton" onAction="#handleSave" styleClass="save-button" text="Cadastrar" />
+         <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="30.0">
+            <children>
+               <Button fx:id="updateButton" mnemonicParsing="false" onAction="#handleUpdate" text="Atualizar" />
+               <Button fx:id="deleteButton" mnemonicParsing="false" onAction="#handleDelete" text="Remover" />
+            </children>
+         </HBox>
+         <TableView fx:id="booksTable" onMouseClicked="#handleTableClick" prefHeight="300.0" prefWidth="700.0">
+           <columns>
+               <TableColumn fx:id="idColumn" prefWidth="75.0" text="ID" />
+             <TableColumn fx:id="nameColumn" prefWidth="75.0" text="Nome" />
+             <TableColumn fx:id="authorColumn" prefWidth="75.0" text="Autor" />
+               <TableColumn fx:id="cddColumn" prefWidth="75.0" text="CDD" />
+               <TableColumn fx:id="copiesColumn" prefWidth="75.0" text="Exemplares" />
+               <TableColumn fx:id="availableColumn" prefWidth="75.0" text="Disp." />
+           </columns>
+         </TableView>
+
+        </VBox>
+    </center>
+
+</BorderPane>

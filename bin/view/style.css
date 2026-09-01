@@ -1,0 +1,171 @@
+/* ============================= */
+/* CONFIGURAÇÃO GERAL            */
+/* ============================= */
+
+.root {
+    -fx-font-family: "Segoe UI";
+    -fx-background-color: #f5f6fa;
+}
+
+
+/* ============================= */
+/* CABEÇALHO                     */
+/* ============================= */
+
+.header {
+    -fx-background-color: #2f3e5c;
+    -fx-padding: 20px;
+}
+
+.title {
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+
+
+/* ============================= */
+/* MENU LATERAL                  */
+/* ============================= */
+
+.menu {
+    -fx-background-color: #222b3d;
+    -fx-padding: 25px 10px;
+}
+
+.menu .button {
+    -fx-background-color: transparent;
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 8px;
+    -fx-cursor: hand;
+}
+
+.menu .button:hover {
+    -fx-background-color: #3b4d70;
+}
+
+.menu .button:pressed {
+    -fx-background-color: #4d638c;
+}
+
+
+/* ============================= */
+/* CONTEÚDO                      */
+/* ============================= */
+
+.content {
+    -fx-background-color: #f5f6fa;
+    -fx-padding: 40px;
+}
+
+.welcome-title {
+    -fx-text-fill: #2f3e5c;
+    -fx-font-weight: bold;
+}
+
+.welcome-text {
+    -fx-text-fill: #666666;
+}
+
+
+/* ============================= */
+/* TÍTULOS DAS TELAS             */
+/* ============================= */
+
+.book-title {
+    -fx-text-fill: #2f3e5c;
+    -fx-font-size: 26px;
+    -fx-font-weight: bold;
+}
+
+
+/* ============================= */
+/* CAMPOS DE TEXTO               */
+/* ============================= */
+
+.text-field {
+    -fx-background-color: white;
+    -fx-border-color: #d5d9e2;
+    -fx-border-radius: 6px;
+    -fx-background-radius: 6px;
+    -fx-padding: 10px;
+    -fx-font-size: 14px;
+}
+
+.text-field:focused {
+    -fx-border-color: #2f3e5c;
+}
+
+
+/* ============================= */
+/* BOTÕES                        */
+/* ============================= */
+
+.button {
+    -fx-background-color: #2f3e5c;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 6px;
+    -fx-padding: 10px 18px;
+    -fx-cursor: hand;
+}
+
+.button:hover {
+    -fx-background-color: #405579;
+}
+
+.button:pressed {
+    -fx-background-color: #243149;
+}
+
+
+/* ============================= */
+/* TABELAS                       */
+/* ============================= */
+
+.table-view {
+    -fx-background-color: white;
+    -fx-border-color: #d5d9e2;
+}
+
+.table-view .column-header-background {
+    -fx-background-color: #2f3e5c;
+}
+
+.table-view .column-header .label {
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+
+.table-row-cell {
+    -fx-background-color: white;
+}
+
+.table-row-cell:filled:hover {
+    -fx-background-color: #eef1f7;
+}
+
+.table-row-cell:selected {
+    -fx-background-color: #dce3f0;
+}
+
+.table-row-cell:selected .text {
+    -fx-fill: #222b3d;
+}
+
+
+/* ============================= */
+/* COMBOBOX                      */
+/* ============================= */
+
+.combo-box {
+    -fx-background-color: white;
+    -fx-border-color: #d5d9e2;
+    -fx-border-radius: 6px;
+    -fx-background-radius: 6px;
+}
+
+.combo-box:focused {
+    -fx-border-color: #2f3e5c;
+}

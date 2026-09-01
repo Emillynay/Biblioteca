@@ -19,63 +19,63 @@ public class BookService {
 	public List<Book> listBooks() {
 		return repository.findAll();
 	}
-	
-	public Book findById(Long id) throws BookNotFoundException {
-        Book book = repository.findById(id);
 
-        if (book == null) {
-            throw new BookNotFoundException("Livro não encontrado.");
-        }
-        return book;
-    }
+	public Book findById(Long id) throws BookNotFoundException {
+		Book book = repository.findById(id);
+
+		if (book == null) {
+			throw new BookNotFoundException("Livro não encontrado.");
+		}
+		return book;
+	}
 
 	public List<Book> findByName(String name) {
 		List<Book> results = new ArrayList<>();
 		for (Book book : repository.findAll()) {
-	        if (book.getName().toLowerCase().contains(name.toLowerCase())) {
-	            results.add(book);
-	        }
-	    }
-	    return results;
+			if (book.getName().toLowerCase().contains(name.toLowerCase())) {
+				results.add(book);
+			}
+		}
+		return results;
 	}
-	
+
 	public List<Book> searchByAuthor(String author) {
-	    List<Book> results = new ArrayList<>();
-	    for (Book book : repository.findAll()) {
-	        if (book.getAuthor()  .toLowerCase().contains(author.toLowerCase())) {
-	            results.add(book);
-	        }
-	    }
-	    return results;
+		List<Book> results = new ArrayList<>();
+		for (Book book : repository.findAll()) {
+			if (book.getAuthor()  .toLowerCase().contains(author.toLowerCase())) {
+				results.add(book);
+			}
+		}
+		return results;
 	}
-	
+
 	public List<Book> searchByCdd(int cdd) {
-	    List<Book> results = new ArrayList<>();
-	    for (Book book :repository.findAll()) {
-	        if (book.getCdd() == cdd) {
-	            results.add(book);
-	        }
-	    }
-	    return results;
+		List<Book> results = new ArrayList<>();
+		for (Book book :repository.findAll()) {
+			if (book.getCdd() == cdd) {
+				results.add(book);
+			}
+		}
+		return results;
 	}
-	
+
 	public void updateBook(Book book) throws BookNotFoundException {
 
-	    Book existingBook = findById(book.getId());
+		Book existingBook = findById(book.getId());
 
-	    existingBook.setName(book.getName());
-	    existingBook.setAuthor(book.getAuthor());
-	    existingBook.setCdd(book.getCdd());
-	    existingBook.setNumberOfCopies(book.getNumberOfCopies());
-	    existingBook.setAvailableCopies(book.getAvailableCopies());
+		existingBook.setName(book.getName());
+		existingBook.setAuthor(book.getAuthor());
+		existingBook.setCdd(book.getCdd());
+		existingBook.setNumberOfCopies(book.getNumberOfCopies());
+		existingBook.setAvailableCopies(book.getAvailableCopies());
 
-	    repository.update(existingBook);
+		repository.update(existingBook);
 	}
 
-    public void removeBook(Long id) throws BookNotFoundException {
-    	
-    	Book book = repository.findById(id);
-    	repository.delete(book);
-    }
-	
+	public void removeBook(Long id) throws BookNotFoundException {
+
+		Book book = repository.findById(id);
+		repository.delete(book);
+	}
+
 }

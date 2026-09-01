@@ -1,0 +1,55 @@
+.root {
+    -fx-font-family: "Segoe UI";
+    -fx-background-color: #f4f6f8;
+}
+
+/* Título */
+.book-title {
+    -fx-font-size: 28px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #1e2a3a;
+}
+
+/* Formulário */
+.book-form {
+    -fx-background-color: white;
+    -fx-background-radius: 12px;
+    -fx-border-color: #d9dee3;
+    -fx-border-width: 1px;
+    -fx-border-radius: 12px;
+    -fx-padding: 30px;
+}
+
+/* Campos */
+.text-field {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #cbd2d9;
+    -fx-border-width: 1px;
+    -fx-border-radius: 6px;
+    -fx-background-radius: 6px;
+    -fx-padding: 10px;
+    -fx-font-size: 14px;
+}
+
+.text-field:focused {
+    -fx-border-color: #2f5d8c;
+    -fx-border-width: 2px;
+}
+
+/* Botão */
+.save-button {
+    -fx-background-color: #1e2a3a;
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 6px;
+    -fx-padding: 10px 25px;
+}
+
+.save-button:hover {
+    -fx-background-color: #2f5d8c;
+}
+
+.save-button:pressed {
+    -fx-background-color: #17334f;
+}

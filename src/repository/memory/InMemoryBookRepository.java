@@ -39,8 +39,5 @@ public class InMemoryBookRepository implements BookRepository {
 
 	@Override
 	public void update(Book book) {
-		// TODO Auto-generated method stub
-		
 	}
-
 }

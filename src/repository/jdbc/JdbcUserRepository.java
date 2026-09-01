@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import database.DB;
-import model.Book;
 import model.User;
 import repository.UserRepository;
 
@@ -45,7 +44,7 @@ public class JdbcUserRepository implements UserRepository {
 
 		try(Connection conn = DB.getConection();
 				PreparedStatement stmt = conn.prepareStatement(sql);
-						ResultSet rs = stmt.executeQuery()) {
+				ResultSet rs = stmt.executeQuery()) {
 
 			while(rs.next()) {
 				Long id = rs.getLong("id");
@@ -59,13 +58,12 @@ public class JdbcUserRepository implements UserRepository {
 			}
 		}catch (SQLException e) {
 			e.printStackTrace();
-			
 		} return users;
 	} 
 
 	@Override
 	public User findById(Long id) {
-		
+
 		String sql = "SELECT * FROM users WHERE id = ?";
 
 		try(Connection conn = DB.getConection();
@@ -97,16 +95,14 @@ public class JdbcUserRepository implements UserRepository {
 				PreparedStatement stmt = conn.prepareStatement(sql)) {
 
 			stmt.setLong(1, user.getId()); 
-
 			int rows = stmt.executeUpdate();
 
 			System.out.println("Linhas deletadas: " + rows);
-
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 	}
-	
+
 	@Override
 	public void update(User user) {
 
@@ -124,11 +120,10 @@ public class JdbcUserRepository implements UserRepository {
 			stmt.setString(3, user.getEmail());
 			stmt.setString(4, user.getAnddress());
 			stmt.setLong(5, user.getId());
-			
+
 			int rows = stmt.executeUpdate();
 
-	        System.out.println("Linhas atualizadas: " + rows);
-
+			System.out.println("Linhas atualizadas: " + rows);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

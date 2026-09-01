@@ -15,208 +15,160 @@ import repository.LoanRepository;
 
 public class JdbcLoanRepository implements LoanRepository {
 
-    private JdbcBookRepository bookRepository = new JdbcBookRepository();
-    private JdbcUserRepository userRepository = new JdbcUserRepository();
+	private JdbcBookRepository bookRepository = new JdbcBookRepository();
+	private JdbcUserRepository userRepository = new JdbcUserRepository();
 
-    @Override
-    public void save(Loan loan) {
+	@Override
+	public void save(Loan loan) {
+		String sql = "INSERT INTO loans "
+				+ "(book_id, user_id, loan_date, expected_return_date, return_date) "
+				+ "VALUES (?, ?, ?, ?, ?)";
 
-    	String sql = "INSERT INTO loans "
-                + "(book_id, user_id, loan_date, expected_return_date, return_date) "
-                + "VALUES (?, ?, ?, ?, ?)";
+		try (Connection conn = DB.getConection();
+				PreparedStatement stmt = conn.prepareStatement(sql, java.sql.Statement.RETURN_GENERATED_KEYS)) {
 
-        try (Connection conn = DB.getConection();
-             PreparedStatement stmt = conn.prepareStatement(
-                     sql,
-                     java.sql.Statement.RETURN_GENERATED_KEYS)) {
+			stmt.setLong(1, loan.getBook().getId());
+			stmt.setLong(2, loan.getUser().getId());
+			stmt.setDate(3, java.sql.Date.valueOf(loan.getLoanDate()));
+			stmt.setDate(4, java.sql.Date.valueOf(loan.getExpectedReturnDate()));
 
-            stmt.setLong(1, loan.getBook().getId());
-            stmt.setLong(2, loan.getUser().getId());
-            stmt.setDate(3, java.sql.Date.valueOf(loan.getLoanDate()));
-            stmt.setDate(4,
-                    java.sql.Date.valueOf(loan.getExpectedReturnDate()));
+			if (loan.getReturnDate() != null) {
+				stmt.setDate(5, java.sql.Date.valueOf(loan.getReturnDate())
+						);
+			} else {
+				stmt.setNull(5, java.sql.Types.DATE);
+			}
+			stmt.executeUpdate();
 
-            if (loan.getReturnDate() != null) {
-                stmt.setDate(
-                        5,
-                        java.sql.Date.valueOf(loan.getReturnDate())
-                );
-            } else {
-                stmt.setNull(5, java.sql.Types.DATE);
-            }
+			try (ResultSet rs = stmt.getGeneratedKeys()) {
+				if (rs.next()) {
+					loan.setId(rs.getLong(1));
+				}
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
 
-            stmt.executeUpdate();
+	@Override
+	public List<Loan> findAll() {
+		List<Loan> loans = new ArrayList<>();
 
-            // Recupera o ID gerado pelo MySQL
-            try (ResultSet rs = stmt.getGeneratedKeys()) {
+		String sql = "SELECT * FROM loans";
 
-                if (rs.next()) {
-                    loan.setId(rs.getLong(1));
-                }
-            }
+		try (Connection conn = DB.getConection();
+				PreparedStatement stmt = conn.prepareStatement(sql);
+				ResultSet rs = stmt.executeQuery()) {
 
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
+			while (rs.next()) {
 
-    @Override
-    public List<Loan> findAll() {
+				Long id = rs.getLong("id");
+				Long bookId = rs.getLong("book_id");
+				Long userId = rs.getLong("user_id");
 
-        List<Loan> loans = new ArrayList<>();
+				java.sql.Date loanSqlDate = rs.getDate("loan_date");
+				java.sql.Date expectedSqlDate = rs.getDate("expected_return_date");
+				java.sql.Date returnSqlDate = rs.getDate("return_date");
 
-        String sql = "SELECT * FROM loans";
+				Book book = bookRepository.findById(bookId);
+				User user = userRepository.findById(userId);
 
-        try (Connection conn = DB.getConection();
-             PreparedStatement stmt = conn.prepareStatement(sql);
-             ResultSet rs = stmt.executeQuery()) {
+				Loan loan = new Loan(id, book,  user, loanSqlDate.toLocalDate(), expectedSqlDate.toLocalDate());
 
-            while (rs.next()) {
+				if (returnSqlDate != null) {
+					loan.setReturnDate(returnSqlDate.toLocalDate());
+				}
+				loans.add(loan);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return loans;
+	}
 
-                Long id = rs.getLong("id");
-                Long bookId = rs.getLong("book_id");
-                Long userId = rs.getLong("user_id");
+	@Override
+	public Loan findById(Long id) {
+		String sql = "SELECT * FROM loans WHERE id = ?";
 
-                java.sql.Date loanSqlDate = rs.getDate("loan_date");
-                java.sql.Date expectedSqlDate =
-                        rs.getDate("expected_return_date");
-                java.sql.Date returnSqlDate =
-                        rs.getDate("return_date");
+		try (Connection conn = DB.getConection();
+				PreparedStatement stmt = conn.prepareStatement(sql)) {
+			stmt.setLong(1, id);
 
-                Book book = bookRepository.findById(bookId);
-                User user = userRepository.findById(userId);
+			try (ResultSet rs = stmt.executeQuery()) {
+				if (rs.next()) {
 
-                Loan loan = new Loan(
-                        id,
-                        book,
-                        user,
-                        loanSqlDate.toLocalDate(),
-                        expectedSqlDate.toLocalDate()
-                );
+					Long loanId = rs.getLong("id");
+					Long bookId = rs.getLong("book_id");
+					Long userId = rs.getLong("user_id");
 
-                if (returnSqlDate != null) {
-                    loan.setReturnDate(returnSqlDate.toLocalDate());
-                }
+					java.sql.Date loanSqlDate = rs.getDate("loan_date");
+					java.sql.Date expectedSqlDate = rs.getDate("expected_return_date");
+					java.sql.Date returnSqlDate =  rs.getDate("return_date");
 
-                loans.add(loan);
-            }
+					Book book = bookRepository.findById(bookId);
+					User user = userRepository.findById(userId);
 
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+					Loan loan = new Loan(loanId, book, user, loanSqlDate.toLocalDate(), expectedSqlDate.toLocalDate());
 
-        return loans;
-    }
+					if (returnSqlDate != null) {
+						loan.setReturnDate(returnSqlDate.toLocalDate());
+					}
+					return loan;
+				}
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
 
-    @Override
-    public Loan findById(Long id) {
+	@Override
+	public void delete(Loan loan) {
+		String sql = "DELETE FROM loans WHERE id = ?";
 
-        String sql = "SELECT * FROM loans WHERE id = ?";
+		try (Connection conn = DB.getConection();
+				PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-        try (Connection conn = DB.getConection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+			stmt.setLong(1, loan.getId());
+			int rows = stmt.executeUpdate();
 
-            stmt.setLong(1, id);
+			System.out.println("Linhas deletadas: " + rows);
 
-            try (ResultSet rs = stmt.executeQuery()) {
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
 
-                if (rs.next()) {
+	@Override
+	public void update(Loan loan) {
 
-                    Long loanId = rs.getLong("id");
-                    Long bookId = rs.getLong("book_id");
-                    Long userId = rs.getLong("user_id");
+		String sql = "UPDATE loans SET "
+				+ "book_id = ?, "
+				+ "user_id = ?, "
+				+ "loan_date = ?, "
+				+ "expected_return_date = ?, "
+				+ "return_date = ? "
+				+ "WHERE id = ?";
 
-                    java.sql.Date loanSqlDate =
-                            rs.getDate("loan_date");
+		try (Connection conn = DB.getConection();
+				PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-                    java.sql.Date expectedSqlDate =
-                            rs.getDate("expected_return_date");
+			stmt.setLong(1, loan.getBook().getId());
+			stmt.setLong(2, loan.getUser().getId());
+			stmt.setDate(3, java.sql.Date.valueOf(loan.getLoanDate()));
+			stmt.setDate(4, java.sql.Date.valueOf(loan.getExpectedReturnDate()));
 
-                    java.sql.Date returnSqlDate =
-                            rs.getDate("return_date");
+			if (loan.getReturnDate() != null) {
+				stmt.setDate(5, java.sql.Date.valueOf(loan.getReturnDate()));
+			} else {
+				stmt.setNull(5, java.sql.Types.DATE);
+			}
+			stmt.setLong(6, loan.getId());
+			int rows = stmt.executeUpdate();
 
-                    Book book = bookRepository.findById(bookId);
-                    User user = userRepository.findById(userId);
-
-                    Loan loan = new Loan(
-                            loanId,
-                            book,
-                            user,
-                            loanSqlDate.toLocalDate(),
-                            expectedSqlDate.toLocalDate()
-                    );
-
-                    if (returnSqlDate != null) {
-                        loan.setReturnDate(returnSqlDate.toLocalDate());
-                    }
-
-                    return loan;
-                }
-            }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return null;
-    }
-
-    @Override
-    public void delete(Loan loan) {
-
-        String sql = "DELETE FROM loans WHERE id = ?";
-
-        try (Connection conn = DB.getConection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-
-            stmt.setLong(1, loan.getId());
-
-            int rows = stmt.executeUpdate();
-
-            System.out.println("Linhas deletadas: " + rows);
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Override
-    public void update(Loan loan) {
-
-        String sql = "UPDATE loans SET "
-                + "book_id = ?, "
-                + "user_id = ?, "
-                + "loan_date = ?, "
-                + "expected_return_date = ?, "
-                + "return_date = ? "
-                + "WHERE id = ?";
-
-        try (Connection conn = DB.getConection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-
-            stmt.setLong(1, loan.getBook().getId());
-            stmt.setLong(2, loan.getUser().getId());
-            stmt.setDate(3, java.sql.Date.valueOf(loan.getLoanDate()));
-            stmt.setDate(4,
-                    java.sql.Date.valueOf(loan.getExpectedReturnDate()));
-
-            if (loan.getReturnDate() != null) {
-                stmt.setDate(
-                        5,
-                        java.sql.Date.valueOf(loan.getReturnDate())
-                );
-            } else {
-                stmt.setNull(5, java.sql.Types.DATE);
-            }
-
-            stmt.setLong(6, loan.getId());
-
-            int rows = stmt.executeUpdate();
-
-            System.out.println("Linhas atualizadas: " + rows);
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
+			System.out.println("Linhas atualizadas: " + rows);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
 }
